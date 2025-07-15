@@ -1,12 +1,20 @@
 # FPV Radar
 
+
+Quick note! This was originally made by lexfp. I recreated some parts of this github page to keep updating it, and also making the page easier to understand for beginners.
+
+
+# Example product
+
+![FpvRadar_complete](https://github.com/user-attachments/assets/4bbb4f72-c5fe-47e5-9ea3-b33ea7693e42)
+
+
 https://youtu.be/YkmsAgEEuzo  
 
-https://youtu.be/ppq6NCjMSJI (video of another user's build in action. Thanks Colby!)
+https://youtu.be/ppq6NCjMSJI 
 
 Monitors the nearby airspace for low flying aircraft.  
-I was initially inspired by and made aware of ADSB by xjet (good old Bruce). https://www.youtube.com/watch?v=ggaDvxNtJ2Q  
-I waited and waited for him to release his code, but alas he forgot and I ended up implementing my own solution. 
+
 To clarify, this is a standalone device and does not require wifi/and or data plan to work. Check your country for ADSB requirements. 
 
 # License
@@ -18,10 +26,10 @@ The code herein written by the Author is released under the terms of the unlicen
 2) GPS module (e.g. Beitian 220) https://www.banggood.com/custlink/mGmRZjPN0m
 3) Buzzer https://www.banggood.com/custlink/GGKdSoHb0F
 4) SDR Dongle (e.g. flightaware, rtl-sdr) I am using the flighaware pro stick plus https://flightaware.com/adsb/prostick/ or for something more compact https://www.amazon.com/gp/product/B01K5K3858/ (I haven't tested this one tho)
-5) micro usb to USB adapter or HUB (if using pi zero since it doesn't have full size usb ports) I used the Zero4U 4 Port USB Hub
-6) 5v voltage regulator for external battery power (optional) - I recommend 2-3A
+5) micro usb to USB adapter or HUB (if using pi zero)
+6) 5v voltage regulator for external battery power (if using external battery that is not 5v)
 7) Antenna - https://www.amazon.com/NooElec-ADS-B-Discovery-Antenna-Bundle/dp/B01J9DH9U2/ref=sr_1_6?dchild=1&keywords=1090+antenna&qid=1612488541&sr=8-6
-8) Case (Anything would work. Just something to keep everything toghether while also protecting the pi) - https://www.thingiverse.com/thing:1886598 I snipped away ap portion of it to glue in the gps.
+8) Case (Anything would work. Just something to keep everything toghether while also protecting the pi) - https://www.thingiverse.com/thing:1886598 I snipped away ap portion of it to glue in the gps. Or https://www.thingiverse.com/thing:4756697?fbclid=IwAR1rNRHUoMtD9yErSb5yf0OHlEy4OJyrLd6rC7ygGXJgEToh9D8qGnDaD9E 
 
 # Installation
 
@@ -32,6 +40,7 @@ The code herein written by the Author is released under the terms of the unlicen
 3) Enable ssh by creating an empty file on the /boot partition of the SD card with the filename of "ssh"  
 
 4) Enable on/off button - While optional, this is highly recommended so that you don't screw up the file system since you won't be able to ssh into the pie to shut down out in the field.  
+
 If you use Raspbian stretch 2017.08.16 or newer, all that is required is to add a line to /boot/config.txt (and reboot for this to take effect):  
 dtoverlay=gpio-shutdown,gpio_pin=3  
 see https://www.stderr.nl/Blog/Hardware/RaspberryPi/PowerButton.html  
@@ -50,7 +59,10 @@ sudo apt install git
 7) Set up GPS:
 For reference, you can use the following site (but follow my instructions instead since they differ a bit):    
 https://maker.pro/raspberry-pi/tutorial/how-to-use-a-gps-receiver-with-raspberry-pi-4  
-You can use various GPS modules, but I have chosen to use the Beitian 220. For wiring, you can use any of the 5v and grounds. I chose pins 4 & 6. The GPS rx will go to the tx on the pi and vice versa. In the case of the beitian 220, the green wire will go to pin 8 (GPIO14) and the white wire will go to pin 10 (GPIO15).  
+You can use various GPS modules, but I have chosen to use the Beitian 220. For wiring, you can use any of the 5v and grounds. I chose pins 4 & 6. The GPS rx will go to the tx on the pi and vice versa. In the case of the beitian 220, the green wire will go to pin 8 (GPIO14) and the white wire will go to pin 10 (GPIO15).
+
+<img width="709" height="554" alt="gps_wiring" src="https://github.com/user-attachments/assets/ae187273-f502-49be-b72d-44e982c2edc5" />
+
 
 Next, you should ssh into your pi and type "sudo raspi-config". Select Interfacing options and then Serial. Enable the serial interface while keeping the login shell disabled.  
 
@@ -72,9 +84,9 @@ Make sure you're in the home directory /home/pi and type "git clone https://gith
 After the command runs, you should have a fpvradar directory with all the files inside.
 Make sure the file /home/pi/fpvradar/fpvradar.py exists.   You can type "ls /home/pi/fpvradar/fpvradar.py"  
 
-At this time you should probably go into the code using your favorite editor (type "nano /home/pi/fpvradar/fpvradar.py") and change the values for the different perimeter alarms along with the altitude at which you want to monitor (INNER_PERIMETER_ALARM_MILES, ALTITUDE_ALARM_FEET, etc...). If you want to play with the other options/settings, be sure to test them as I haven't done much testing other than the defaults. Once you finish editing, you can hit ctrl-x to exit and it will ask you if you want to save first. Just answer yes.
+At this time you should change the code to your liking. Type "nano /home/pi/fpvradar/fpvradar.py" and change the values for the different perimeter alarms along with the altitude at which you want to monitor (INNER_PERIMETER_ALARM_MILES, ALTITUDE_ALARM_FEET, etc...). If you want to play with the other options/settings, be sure to test them as I haven't done much testing other than the defaults. Once you finish editing, you can hit ctrl-x to exit and it will ask you if you want to save first. Just answer yes.
 
-9) Turn fpvradar into a service which automatically starts:
+9) Turn fpvradar into a service so it automatically starts when the pi is powered:
 
 /lib/systemd/system/fpvradar.service (move included fpvradar.service file to /lib/systemd/system)    
 sudo systemctl daemon-reload  
@@ -112,8 +124,6 @@ Since your flying fpv, and your visulizer is focused on the drone. A screen woul
 Most of the issues I've experienced are from the GPS not getting signal while testing indoors. You will also need to double check your wiring to make sure everything is hooked up correctly. Try writing code to test each component separately (buzzer, gps).
 
 ## Future  
-Adding a second dongle to monitor 978 as well.  
-Instead of using gps data from the PI, feed telemetry position data from the plane back into the PI. Maybe bluetooth?  
 If someone wants to design a better 3d printed case for this, I would be happy to link to it.  
 
 ## FAQ: 
@@ -123,12 +133,7 @@ Depends on your antenna. I use the pro stick which has an internal filter. Coupl
 
 Can I use other Pis?  
 Yes, you should be able to use almost any. My initial prototype (these pics are my 2nd prototype) was a Pi 3 model B from 2016. Unfortunately, I burned that one up by wiring up a voltage regulator to it without checking the inputs/outputs. Since I knew the concept worked, I wanted to build the second one to be as small/compact as possible.  
-
-Do you sell these?  
-No. My time is worth a lot to me, so go build your own.  
-
-Why do you have switches on yours?  
-The white switch is the momentary on/off switch to turn the pi on and off out in the field. Unplugging is a bad idea as you can corrupt your file system in which case you have to reformat the card and start from scratch. The black switch is if I am at home and I don't want to use the GPS/buzzer and I just want to monitor aircraft around me instead.  
+ 
 
 What is the approximate cost?  
 For the setup I have, the cost of the components are around $50. This doesn't include the antenna which I made myself.  
