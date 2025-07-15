@@ -20,8 +20,8 @@ The code herein written by the Author is released under the terms of the unlicen
 4) SDR Dongle (e.g. flightaware, rtl-sdr) I am using the flighaware pro stick plus https://flightaware.com/adsb/prostick/ or for something more compact https://www.amazon.com/gp/product/B01K5K3858/ (I haven't tested this one tho)
 5) micro usb to USB adapter or HUB (if using pi zero since it doesn't have full size usb ports) I used the Zero4U 4 Port USB Hub
 6) 5v voltage regulator for external battery power (optional) - I recommend 2-3A
-7) Antenna - mine is homemade, but you can purchase a 1090 one easily https://www.amazon.com/NooElec-ADS-B-Discovery-Antenna-Bundle/dp/B01J9DH9U2/ref=sr_1_6?dchild=1&keywords=1090+antenna&qid=1612488541&sr=8-6
-8) Case - I used the top cover for the one here: https://www.thingiverse.com/thing:1886598 I snipped away ap portion of it to glue in the gps.
+7) Antenna - https://www.amazon.com/NooElec-ADS-B-Discovery-Antenna-Bundle/dp/B01J9DH9U2/ref=sr_1_6?dchild=1&keywords=1090+antenna&qid=1612488541&sr=8-6
+8) Case (Anything would work. Just something to keep everything toghether while also protecting the pi) - https://www.thingiverse.com/thing:1886598 I snipped away ap portion of it to glue in the gps.
 
 # Installation
 
@@ -40,6 +40,7 @@ You will also need to wire a momentary switch/button between GPIO3(pin 5) & Grou
 5) Buzzer (optional) - wire positive to GPIO17 and black to any ground. 
 
 6) Install the following libraries (script was tested against python 2.7.16):  
+
 sudo apt-get update  
 sudo apt-get install python-requests  
 sudo apt install python-gpiozero  
@@ -50,14 +51,19 @@ sudo apt install git
 For reference, you can use the following site (but follow my instructions instead since they differ a bit):    
 https://maker.pro/raspberry-pi/tutorial/how-to-use-a-gps-receiver-with-raspberry-pi-4  
 You can use various GPS modules, but I have chosen to use the Beitian 220. For wiring, you can use any of the 5v and grounds. I chose pins 4 & 6. The GPS rx will go to the tx on the pi and vice versa. In the case of the beitian 220, the green wire will go to pin 8 (GPIO14) and the white wire will go to pin 10 (GPIO15).  
+
 Next, you should ssh into your pi and type "sudo raspi-config". Select Interfacing options and then Serial. Enable the serial interface while keeping the login shell disabled.  
+
 Next install the gps software: "sudo apt-get install gpsd gpsd-clients"  
 You can test if it works by "cat /dev/serial0". If you see no output, then chances are you may have to switch the tx/rx wires on the GPS (white and green).  
+
 Next add the pi user to the dialout group: "sudo adduser pi dialout"  
+
 Lastly, in order to have this take effect on startup, "sudo nano /etc/default/gpsd"  
 Comment out the DEVICES and GPSD_OPTIONS lines and add these lines to the end of the file:  
 GPSD_OPTIONS="/dev/serial0"  
 GPSD_SOCKET="/var/run/gpsd.sock"  
+
 After rebooting, you can test if everything works with either "sudo gpsmon" or "sudo cgps -s"  
 
 
@@ -65,32 +71,42 @@ After rebooting, you can test if everything works with either "sudo gpsmon" or "
 Make sure you're in the home directory /home/pi and type "git clone https://github.com/lexfp/fpvradar.git"  
 After the command runs, you should have a fpvradar directory with all the files inside.
 Make sure the file /home/pi/fpvradar/fpvradar.py exists.   You can type "ls /home/pi/fpvradar/fpvradar.py"  
+
 At this time you should probably go into the code using your favorite editor (type "nano /home/pi/fpvradar/fpvradar.py") and change the values for the different perimeter alarms along with the altitude at which you want to monitor (INNER_PERIMETER_ALARM_MILES, ALTITUDE_ALARM_FEET, etc...). If you want to play with the other options/settings, be sure to test them as I haven't done much testing other than the defaults. Once you finish editing, you can hit ctrl-x to exit and it will ask you if you want to save first. Just answer yes.
 
 9) Turn fpvradar into a service which automatically starts:
+
 /lib/systemd/system/fpvradar.service (move included fpvradar.service file to /lib/systemd/system)    
 sudo systemctl daemon-reload  
 sudo systemctl enable fpvradar.service    
+
 If you need to check if it is running after you reboot, you can use the status command:  
+
 sudo systemctl status fpvradar.service  
+
 If things appear running but they still don't work, then move on to the next steps and check the logs.  
 
 10) Persistent LOGS (Optional)  
 set your time zone (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones):  
+
 sudo timedatectl set-timezone America/New_York  
 sudo mkdir -p /var/log/journal
 sudo nano /etc/systemd/journald.conf
+
 change/add the following:  
+
 Storage=persistent
+
 To see the logs you can use the following commands (you can also use -2,-3 to go back even further):  
+
 sudo journalctl -b 0 -u fpvradar.service (current boot logs)  
 sudo journalctl -b -1 -u fpvradar.service (previous boot logs) 
 
 11) Power  
-You can power your pi from the regular USB port or an external battery. If using an external battery, you'll need to use a 5v regulator. There are a few ways to wire up the PI to be powered from a battery, but I went with hooking up a 5v regulator to the 5v rails. You can google the different options.
+You can power your pi from the regular USB port or an external battery. If using an external battery, you'll need to use a 5v regulator. There are a few ways to wire up the PI to be powered from a battery. You can google the different options.
 
 12) Screen (optional)  
-The reason I did not add a screen to this like Bruce did was for a multitude of reasons. Since I fly fpv, I would not be looking at the screen most of the time and it would only consume extra power. I also wanted it to be as compact and inexpensive as possible. Should you want to add a screen, however, there is an easy solution. If you carry a cell phone, simply create a hotspot with the same wifi name/password as you used at your home router. While you're out in the field, it will not find your home router, but will connect to your phone instead. Once it connects to your phone, you will need to find the IP address of the Pi. If your phone doesn't let you see it by default, you'll need to install an hotspot manager app such as https://play.google.com/store/apps/details?id=com.catchy.tools.mobilehotspot.dp&hl=en_US&gl=US which will show it to you. Once you find the ip, simply enter it in your browser on the phone and it will show you a map with surrounding planes (default piaware screen). 
+Since your flying fpv, and your visulizer is focused on the drone. A screen wouldn't be ideal for some use cases. Should you want to add a screen, there is an easy solution. If you carry a cell phone, simply create a hotspot (On your phone) with the same wifi name/password as you used at your home router. While you're out in the field, it will not find your home router, but will connect to your phone instead. Once it connects to your phone, you will need to find the IP address of the Pi. If your phone doesn't let you see it by default, you'll need to install an hotspot manager app such as https://play.google.com/store/apps/details?id=com.catchy.tools.mobilehotspot.dp&hl=en_US&gl=US which will show it to you. Once you find the ip, simply enter it in your browser on the phone and it will show you a map with surrounding planes (default piaware screen). 
 
 ## Troubleshooting  
 Most of the issues I've experienced are from the GPS not getting signal while testing indoors. You will also need to double check your wiring to make sure everything is hooked up correctly. Try writing code to test each component separately (buzzer, gps).
