@@ -1,6 +1,7 @@
 # FPV Radar
 
 
+
 Quick note! This was originally made by lexfp. I recreated some parts of this github page to keep updating it, and also making the page easier to understand for beginners.
 
 
@@ -30,6 +31,8 @@ The code herein written by the Author is released under the terms of the unlicen
 6) 5v voltage regulator for external battery power (if using external battery that is not 5v)
 7) Antenna - https://www.amazon.com/LM-YN-Omnidirectional-Compatible-Frequency/dp/B01N6GO584/ref=sr_1_4?crid=HYF59H6O5LOO&dib=eyJ2IjoiMSJ9.s_OeoFvC0c7s8LYIGZMQzSGbPPw4DRyqC0XvM45m3BL1FxxWSo5734lvONCCUZJyVfJITSi3Zv49yoLBItw087RS3mbxN7GgDpcIGzu6IGIgkeDIFQ97fcVnGhg2YUnyzK9n1qF069a_2p_P5zURzaMaT7BWIKFClOyYJKsC7ka43DIfqauYItgoeOONqLVqDwkfzh7Q6mUnoHllhc6zKK-FuW-GciHnHDNdwmSvHPBDNpYaXF3cBHF2a-Ps-RtFQltqCh9ykg209CotK_L0aOhtk_or7na6KRyxZvK9jCI.b4eL4aHk0AiuTjCEKTL8NiH7Krg4AiuQoMSsVQAgRV0&dib_tag=se&keywords=1900mhz+antenna&qid=1752536658&s=electronics&sprefix=1900mhz+anten%2Celectronics%2C144&sr=1-4
 8) Case (Anything would work. Just something to keep everything toghether while also protecting the pi) - https://www.thingiverse.com/thing:1886598 I snipped away ap portion of it to glue in the gps. Or https://www.thingiverse.com/thing:4756697?fbclid=IwAR1rNRHUoMtD9yErSb5yf0OHlEy4OJyrLd6rC7ygGXJgEToh9D8qGnDaD9E 
+
+Final price (Not including rpi, case, or battery since those are interchangable) is about $55 before tax and shipping.
 
 # Installation
 
