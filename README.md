@@ -25,10 +25,10 @@ The code herein written by the Author is released under the terms of the unlicen
 1) Raspberry pi (zero w used in this guide) https://www.banggood.com/custlink/mvDhZjVbBW (don't buy it at banggood unless you have to since it's expensive there)
 2) GPS module (e.g. Beitian 220) https://www.banggood.com/custlink/mGmRZjPN0m
 3) Buzzer https://www.banggood.com/custlink/GGKdSoHb0F
-4) SDR Dongle (e.g. flightaware, rtl-sdr) I am using the flighaware pro stick plus https://flightaware.com/adsb/prostick/ or for something more compact https://www.amazon.com/gp/product/B01K5K3858/ (I haven't tested this one tho)
+4) SDR Dongle (e.g. flightaware, rtl-sdr) https://flightaware.com/adsb/prostick/ 
 5) micro usb to USB adapter or HUB (if using pi zero)
 6) 5v voltage regulator for external battery power (if using external battery that is not 5v)
-7) Antenna - https://www.amazon.com/NooElec-ADS-B-Discovery-Antenna-Bundle/dp/B01J9DH9U2/ref=sr_1_6?dchild=1&keywords=1090+antenna&qid=1612488541&sr=8-6
+7) Antenna - https://www.amazon.com/LM-YN-Omnidirectional-Compatible-Frequency/dp/B01N6GO584/ref=sr_1_4?crid=HYF59H6O5LOO&dib=eyJ2IjoiMSJ9.s_OeoFvC0c7s8LYIGZMQzSGbPPw4DRyqC0XvM45m3BL1FxxWSo5734lvONCCUZJyVfJITSi3Zv49yoLBItw087RS3mbxN7GgDpcIGzu6IGIgkeDIFQ97fcVnGhg2YUnyzK9n1qF069a_2p_P5zURzaMaT7BWIKFClOyYJKsC7ka43DIfqauYItgoeOONqLVqDwkfzh7Q6mUnoHllhc6zKK-FuW-GciHnHDNdwmSvHPBDNpYaXF3cBHF2a-Ps-RtFQltqCh9ykg209CotK_L0aOhtk_or7na6KRyxZvK9jCI.b4eL4aHk0AiuTjCEKTL8NiH7Krg4AiuQoMSsVQAgRV0&dib_tag=se&keywords=1900mhz+antenna&qid=1752536658&s=electronics&sprefix=1900mhz+anten%2Celectronics%2C144&sr=1-4
 8) Case (Anything would work. Just something to keep everything toghether while also protecting the pi) - https://www.thingiverse.com/thing:1886598 I snipped away ap portion of it to glue in the gps. Or https://www.thingiverse.com/thing:4756697?fbclid=IwAR1rNRHUoMtD9yErSb5yf0OHlEy4OJyrLd6rC7ygGXJgEToh9D8qGnDaD9E 
 
 # Installation
